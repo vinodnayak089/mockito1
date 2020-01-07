@@ -5,7 +5,6 @@ import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
 
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 import java.util.Optional;
 
@@ -20,9 +19,6 @@ import org.springframework.test.context.junit4.SpringRunner;
 import com.mphasis.account.model.AccountModel;
 import com.mphasis.account.repository.AccountRepository;
 
-import junit.framework.Assert;
-import junit.runner.Version;
-
 
 @RunWith(SpringRunner.class)
 public class TestAccountService {
@@ -32,7 +28,7 @@ public class TestAccountService {
 
 	@Mock
 	AccountRepository accountRepository;
-	
+
 
 	@Test
 	public void testfindall() {
@@ -57,51 +53,55 @@ public class TestAccountService {
 		accountModel.setAcc("134");
 		accountModel.setName("vinod");
 		accountModel.setBranch("hyde");
-		
+
 		Mockito.when(accountRepository.save(accountModel)).thenReturn( accountModel);
 		assertEquals(accountModel,accountService.add(accountModel));
 
 	}
-	
+
 	@Test
 	public void testfindId() {
-		AccountModel accountModel= new AccountModel();
+
+		AccountModel accountModel = new AccountModel();
 		accountModel.setAcc("134");
-		accountModel.setName("vinod");
+		accountModel.setName("vinod"); 
 		accountModel.setBranch("hyde");
 		//Optional<AccountModel> account= Optional.of(accountModel);
-		
-		Mockito.when(accountRepository.findById("134")).thenReturn(accountModel);
-		assertThat(accountService.findId("134")).isEqualTo( accountModel);
+
+		Optional<AccountModel> accountModelOptional = Optional.of(accountModel);
+
+		Mockito.when(accountRepository.findById("134")).thenReturn(accountModelOptional);
+		assertThat(accountService.findId("134")).isEqualTo(accountModelOptional);
 	}
 
-	@Ignore
-    @Test
+	@Test
 	public void testUpdate(){
 		AccountModel accountModel= new AccountModel();
 		accountModel.setAcc("134");
 		accountModel.setName("vinod");
 		accountModel.setBranch("hyde");
 
+		Optional<AccountModel> accountModelOptional = Optional.of(accountModel);
 
-		Mockito.when(accountRepository.findById("134")).thenReturn(accountModel);
+		Mockito.when(accountRepository.findById("134")).thenReturn(accountModelOptional);
 
 		accountModel.setAcc("143");
 		Mockito.when(accountRepository.save(accountModel)).thenReturn(accountModel);
 
-		assertThat(accountService.update(accountModel, "143")).isEqualTo((AccountModel)accountModel);
+		assertThat(accountService.update(accountModel, "143")).isEqualTo(accountModel);
 
 	}
 
-    @Ignore
+	
 	@Test
 	public void testDelete(){
 		AccountModel accountModel= new AccountModel();
 		accountModel.setAcc("134");
 		accountModel.setName("vinod");
 		accountModel.setBranch("hyde");
+		Optional<AccountModel> accountModelOptional = Optional.of(accountModel);
 
-		Mockito.when(accountRepository.findById("134")).thenReturn(accountModel);
+		Mockito.when(accountRepository.findById("134")).thenReturn(accountModelOptional);
 		Mockito.when(accountRepository.existsById(accountModel.getAcc())).thenReturn(false);
 		assertFalse(accountRepository.existsById(accountModel.getAcc()));
 	}
